@@ -1,0 +1,9 @@
+# Compiled binary — Go produces a single executable file
+go-health-check
+go-health-check.exe
+
+# Go test cache
+*.test
+
+# Environment files (we'll use these later for config)
+.env
