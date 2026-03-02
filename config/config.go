@@ -22,6 +22,18 @@ type Config struct {
 
 	// Targets is the list of URLs to monitor.
 	Targets []checker.Target
+
+	// LogFile is the path to the file where results are written.
+	// e.g. "health-check.log"
+	LogFile string
+
+	// HTTPPort is the port the status dashboard listens on.
+	// e.g. "8080" → http://localhost:8080/status
+	HTTPPort string
+
+	// WebhookURL is the endpoint to POST alerts to when a site goes down.
+	// Empty string means notifications are disabled.
+	WebhookURL string
 }
 
 // Load reads all config from environment variables and returns a Config.
@@ -68,9 +80,33 @@ func Load() (Config, error) {
 		return Config{}, err
 	}
 
+	// --- Log file ---
+
+	// os.Getenv returns "" if the variable isn't set — we use a default in that case.
+	logFile := os.Getenv("LOG_FILE")
+	if logFile == "" {
+		logFile = "health-check.log" // sensible default if not configured
+	}
+
+	// --- HTTP port ---
+
+	httpPort := os.Getenv("HTTP_PORT")
+	if httpPort == "" {
+		httpPort = "8080" // sensible default if not configured
+	}
+
+	// --- Webhook URL ---
+
+	// No default here — empty string means "notifications disabled".
+	// We don't validate the URL format; if it's wrong the notifier will return an error.
+	webhookURL := os.Getenv("WEBHOOK_URL")
+
 	return Config{
 		IntervalSeconds: intervalSeconds,
 		Targets:         targets,
+		LogFile:         logFile,
+		HTTPPort:        httpPort,
+		WebhookURL:      webhookURL,
 	}, nil
 }
 

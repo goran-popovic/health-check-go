@@ -7,3 +7,9 @@ go-health-check.exe
 
 # Environment files (we'll use these later for config)
 .env
+
+# Claude Code local settings
+.claude/
+
+# Log file
+health-check.log
