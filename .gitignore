@@ -10,3 +10,6 @@ go-health-check.exe
 
 # Claude Code local settings
 .claude/
+
+# Log file
+health-check.log
